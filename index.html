@@ -701,6 +701,13 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
   .mbar a.b{background:var(--coral);color:#2b1a14}.mbar a.b svg{stroke:#2b1a14}
 }
 @media (max-width:420px){.brand small{display:none}}
+
+/* ===== HERO VIDEO («life layer v3», 21 Sept 2026): the photo is always underneath; the living loop fades in over it only once it really plays ===== */
+.hv{position:relative}
+.hv-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease;pointer-events:none}
+.hv.on .hv-v{opacity:1}
+.hv.on img{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.hv-v{display:none}}
 </style>
 </head>
 <body id="top">
@@ -770,7 +777,7 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
       <svg class="blob sA b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--sage)" transform="translate(100 100)" d="M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z"/></svg>
       <svg class="blob sB b2 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--coral-soft)" transform="translate(100 100)" d="M58.6,0.0C59.2,16.7,61.6,39.9,51.8,51.8C42.1,63.8,16.6,72.5,0.0,71.8C-16.6,71.1,-37.7,59.6,-47.7,47.7C-57.7,35.7,-59.0,16.9,-60.0,0.0C-61.1,-16.9,-63.9,-41.1,-53.9,-53.9C-43.9,-66.6,-17.0,-77.5,-0.0,-76.6C17.0,-75.7,38.6,-61.1,48.3,-48.3C58.1,-35.6,58.0,-16.7,58.6,0.0Z"/></svg>
       <svg class="blob sC b3" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--sun)" transform="translate(100 100)" d="M54.3,0.0C52.2,15.6,49.5,29.6,40.4,40.4C31.4,51.2,15.4,63.1,0.0,65.0C-15.4,66.9,-42.1,62.6,-51.7,51.7C-61.4,40.9,-59.8,15.4,-57.9,0.0C-56.0,-15.4,-50.1,-30.3,-40.4,-40.4C-30.8,-50.5,-15.6,-58.4,-0.0,-60.5C15.6,-62.6,44.1,-63.3,53.2,-53.2C62.2,-43.1,56.5,-15.6,54.3,0.0Z"/></svg>
-      <div class="ph"><img src="assets/img/anthi-garden.webp" width="1100" height="1374" fetchpriority="high" decoding="async" alt="Η ψυχολόγος Ανθή Θωμά σε εξωτερικό χώρο" data-lb></div>
+      <div class="ph hv"><img src="assets/img/anthi-garden.webp" width="1100" height="1374" fetchpriority="high" decoding="async" alt="Η ψυχολόγος Ανθή Θωμά σε εξωτερικό χώρο" data-lb><video class="hv-v" muted loop playsinline preload="none" poster="assets/video/hero-poster.webp" aria-hidden="true" tabindex="-1" data-webm="assets/video/hero.webm" data-mp4="assets/video/hero.mp4"></video></div>
       <a class="badge" href="https://www.doctoranytime.gr/d/Psychologos/anthi-thoma#review-section" target="_blank" rel="noopener"><span><span class="st" aria-hidden="true">★★★★★</span><b>10/10</b><small data-i="hb">δεκάδες αξιολογήσεις</small></span></a>
     </div>
   </div>
@@ -1282,6 +1289,16 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
   d.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click',function(){ setLang(b.dataset.lang); }); });
   try{ if(localStorage.getItem('th-lang')==='en') setLang('en'); }catch(e){}
 })();
+</script>
+<script>
+/* hero video: after first paint; never on Save-Data / 2g / reduced motion; plays only while on screen */
+(function(){var v=document.querySelector('.hv-v');if(!v||!('IntersectionObserver' in window))return;
+ var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+ function load(){['webm','mp4'].forEach(function(t){var s=document.createElement('source');s.src=v.dataset[t];s.type='video/'+t;v.appendChild(s)});
+  v.addEventListener('playing',function(){v.parentNode.classList.add('on')},{once:true});v.load();
+  new IntersectionObserver(function(e){e[0].isIntersecting?v.play().catch(function(){}):v.pause()},{threshold:.15}).observe(v)}
+ function go(){(window.requestIdleCallback||function(f){setTimeout(f,700)})(load)}
+ document.readyState==='complete'?go():window.addEventListener('load',go)})();
 </script>
 </body>
 </html>
