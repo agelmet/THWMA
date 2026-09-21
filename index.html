@@ -140,7 +140,7 @@ section{padding:120px 0;position:relative;overflow-x:clip}
 .hero .who span{font:600 .74rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .hero .who i{width:34px;height:1.5px;background:var(--coral)}
 .hero h1{font-size:clamp(2.6rem,1.6rem + 3.6vw,4.6rem);line-height:1.06;margin-bottom:26px}
-.hero h1 em{font-style:italic;color:var(--deep)}
+.hero h1 em{font-style:italic;color:var(--deep);position:relative}
 .hero .sub{font:400 clamp(1.1rem,1rem + .45vw,1.35rem)/1.6 var(--sans);color:var(--muted);max-width:520px;margin-bottom:36px}
 .hero .cta{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
 .hero .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:44px}
@@ -166,8 +166,11 @@ section{padding:120px 0;position:relative;overflow-x:clip}
 
 /* outside / inside (Tess-style) */
 .outside{background:var(--white)}
-.outside .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:90px;align-items:start}
-.o-photo{position:sticky;top:110px;justify-self:center;width:min(100%,440px)}
+.o-head{text-align:center;max-width:900px;margin:0 auto 70px}
+.o-head .eyebrow::after{left:50%;margin-left:-23px}
+.o-head .inner{max-width:760px;margin:0 auto}
+.o-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.o-photo{position:relative;justify-self:center;width:min(100%,520px)}
 .o-photo img{position:relative;z-index:1;width:100%;height:auto;aspect-ratio:1000/1500;border-radius:24px}
 .o-photo .b1{width:230px;right:-80px;bottom:-60px}
 .o-photo .b2{width:150px;right:30px;bottom:-90px}
@@ -459,10 +462,9 @@ html.intro-off .veil{display:none}
 /* 2 · hero: living gradient words, pointer light, depth blobs, breathing photo, scroll cue */
 .hero{--gx:50%;--gy:40%}
 .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(520px circle at var(--gx) var(--gy),color-mix(in srgb,var(--teal-soft) 80%,transparent),transparent 70%);opacity:.8;pointer-events:none;transition:opacity .6s}
-.hero h1 em{background:linear-gradient(90deg,var(--deep) 0%,var(--teal) 30%,var(--coral) 55%,var(--deep) 80%,var(--deep) 100%);background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.hero h1 em{color:var(--deep);-webkit-text-fill-color:var(--deep);background:linear-gradient(90deg,var(--coral),var(--sun)) no-repeat 0 94%/0% .09em}
+.hero.go h1 em{background-size:100% .09em;transition:background-size 1.1s var(--ease) 1s}
 @media (prefers-reduced-motion:no-preference){
- .hero h1 em{animation:ink 9s linear infinite}
- @keyframes ink{to{background-position:-280% 0}}
  .hero-art .ph img{animation:kb 22s ease-in-out infinite alternate}
  @keyframes kb{to{transform:scale(1.07) translate(-1.5%,1%)}}
  .hero-art .blob{transition:transform .9s var(--ease)}
@@ -508,7 +510,7 @@ html.scrolled .cue{opacity:0}
 .evidence blockquote em{font-style:italic;background:linear-gradient(120deg,var(--sun-soft),var(--sun-soft)) no-repeat 0 92%/0% 38%;transition:background-size 1s var(--ease);padding:0 .08em;border-radius:3px}
 .evidence blockquote.in em{background-size:100% 38%}
 .evidence blockquote.in em:nth-of-type(2){transition-delay:.5s}
-.js .ev-ph.rv{transform:translateY(60px)}
+.js .ev-ph.rv{transform:translateY(60px) scale(.94)}
 .js .ev-ph.rv.in{transform:none}
 .ev-tags span{transition:transform .3s var(--ease),background .3s}
 @media (hover:hover){.ev-tags span:hover{transform:translateY(-3px) rotate(-2deg);background:var(--sun-soft)}}
@@ -556,13 +558,12 @@ html.scrolled .cue{opacity:0}
 .js .cv-ph.rv{transform:translateY(40px) rotate(2deg)}
 .js .cv-ph.rv.in{transform:none}
 
-/* 11 · the space: diagonal wipes in alternating directions, hover peek */
-.gal button{position:relative}
-.gal button::after{content:"";position:absolute;inset:-2px;background:var(--paper-2);transform:skewX(-14deg) translateX(0);transform-origin:0 50%;transition:transform .9s cubic-bezier(.7,0,.2,1);pointer-events:none}
-.gal button:nth-child(even)::after{transform-origin:100% 50%}
-.js .gal button.rv{transform:none;opacity:1}
-.js .gal button.rv.in::after{transform:skewX(-14deg) translateX(-130%)}
-.js .gal button:nth-child(even).rv.in::after{transform:skewX(-14deg) translateX(130%)}
+/* 11 · the space: photos rise in a soft wave, image settles from a gentle zoom */
+.js .gal button.rv{transform:translateY(40px);transition-delay:calc(var(--gi,0)*90ms)}
+.js .gal button.rv.in{transform:none}
+.gal img{transition:transform 1.2s var(--ease)}
+.js .gal button.rv:not(.in) img{transform:scale(1.15)}
+.gal button:nth-child(1){--gi:0}.gal button:nth-child(2){--gi:1}.gal button:nth-child(3){--gi:2}.gal button:nth-child(4){--gi:3}.gal button:nth-child(5){--gi:4}
 @media (hover:hover){.gal button:hover img{transform:scale(1.05) rotate(.6deg)}}
 
 /* 12 · reviews: cards slide in from the right, five stars light up one after another */
@@ -648,12 +649,11 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
  .veil{display:none!important}
  .gx.out{transform:none;opacity:1}
  .js .rv,.js .pf.rv,.js .sv.rv,.js .rcard.rv,.js .whom article.rv,.js .ap-list li.rv,.js .tl li.rv,.js .gal button.rv{transform:none;opacity:1}
- .gal button::after,.outside .pull::before,.outside .goal::before,.tl::before,.map::after{transition:none}
- .gal button.rv::after{transform:skewX(-14deg) translateX(-130%)}
+ .outside .pull::before,.outside .goal::before,.tl::before,.map::after{transition:none}
  .tl::before,.outside .pull::before,.outside .goal::before{transform:none}
  .rcard .st i,.tl li::before{transform:none}
  .ap-dot svg *{stroke-dashoffset:0}
- .brand svg .rot,.ftr .fb,.hero h1 em,.hero-art .ph img,.cue i::after,.tick-in{animation:none;transition:none}
+ .brand svg .rot,.ftr .fb,.hero-art .ph img,.cue i::after,.tick-in{animation:none;transition:none}
 }
 @keyframes mA{0%{d:path("M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z")}50%{d:path("M67.3,0.0C66.8,17.6,62.4,39.1,51.2,51.2C40.0,63.3,15.4,74.4,0.0,72.7C-15.4,71.0,-32.0,53.1,-41.0,41.0C-50.1,28.9,-53.5,14.4,-54.3,0.0C-55.1,-14.4,-54.7,-35.3,-45.6,-45.6C-36.6,-55.9,-16.6,-60.2,-0.0,-61.7C16.6,-63.1,43.0,-64.5,54.2,-54.2C65.4,-43.9,67.8,-17.6,67.3,0.0Z")}100%{d:path("M61.3,0.0C62.8,15.7,62.0,39.6,51.8,51.8C41.5,63.9,17.8,72.6,0.0,73.2C-17.8,73.7,-45.1,67.2,-55.0,55.0C-64.9,42.8,-61.2,16.3,-59.2,0.0C-57.2,-16.3,-52.6,-33.1,-42.7,-42.7C-32.9,-52.4,-14.2,-58.1,-0.0,-58.1C14.2,-58.1,32.4,-52.3,42.6,-42.6C52.9,-33.0,59.7,-15.7,61.3,0.0Z")}}@keyframes mB{0%{d:path("M58.6,0.0C59.2,16.7,61.6,39.9,51.8,51.8C42.1,63.8,16.6,72.5,0.0,71.8C-16.6,71.1,-37.7,59.6,-47.7,47.7C-57.7,35.7,-59.0,16.9,-60.0,0.0C-61.1,-16.9,-63.9,-41.1,-53.9,-53.9C-43.9,-66.6,-17.0,-77.5,-0.0,-76.6C17.0,-75.7,38.6,-61.1,48.3,-48.3C58.1,-35.6,58.0,-16.7,58.6,0.0Z")}50%{d:path("M80.8,0.0C80.2,14.3,54.4,31.9,41.0,41.0C27.5,50.1,16.5,51.8,0.0,54.7C-16.5,57.5,-48.1,67.1,-58.0,58.0C-67.8,48.8,-62.1,16.4,-59.2,0.0C-56.3,-16.4,-50.4,-28.5,-40.6,-40.6C-30.7,-52.6,-14.3,-71.5,-0.0,-72.2C14.3,-73.0,31.6,-57.1,45.0,-45.0C58.5,-33.0,81.5,-14.3,80.8,0.0Z")}100%{d:path("M79.9,0.0C82.6,16.3,70.3,43.8,57.0,57.0C43.6,70.1,16.1,81.8,0.0,79.0C-16.1,76.1,-28.1,53.0,-39.8,39.8C-51.6,26.7,-69.5,14.4,-70.6,0.0C-71.7,-14.4,-58.3,-35.1,-46.6,-46.6C-34.8,-58.0,-14.6,-69.8,-0.0,-68.8C14.6,-67.9,27.4,-52.2,40.8,-40.8C54.1,-29.3,77.2,-16.3,79.9,0.0Z")}}@keyframes mC{0%{d:path("M54.3,0.0C52.2,15.6,49.5,29.6,40.4,40.4C31.4,51.2,15.4,63.1,0.0,65.0C-15.4,66.9,-42.1,62.6,-51.7,51.7C-61.4,40.9,-59.8,15.4,-57.9,0.0C-56.0,-15.4,-50.1,-30.3,-40.4,-40.4C-30.8,-50.5,-15.6,-58.4,-0.0,-60.5C15.6,-62.6,44.1,-63.3,53.2,-53.2C62.2,-43.1,56.5,-15.6,54.3,0.0Z")}50%{d:path("M56.2,0.0C55.2,15.1,51.8,32.0,42.4,42.4C33.1,52.8,16.4,60.2,0.0,62.5C-16.4,64.8,-44.7,66.4,-56.0,56.0C-67.3,45.6,-68.5,18.1,-67.9,0.0C-67.3,-18.1,-63.8,-43.0,-52.4,-52.4C-41.1,-61.9,-16.8,-57.5,-0.0,-56.8C16.8,-56.1,38.9,-57.7,48.3,-48.3C57.6,-38.8,57.1,-15.1,56.2,0.0Z")}100%{d:path("M70.0,0.0C71.4,15.4,62.4,37.9,50.7,50.7C39.0,63.5,15.7,78.0,0.0,76.9C-15.7,75.7,-31.6,56.5,-43.7,43.7C-55.7,30.9,-70.2,16.6,-72.3,0.0C-74.3,-16.6,-67.9,-42.6,-55.8,-55.8C-43.8,-69.1,-16.3,-81.8,-0.0,-79.4C16.3,-77.1,30.2,-55.1,41.9,-41.9C53.5,-28.6,68.5,-15.4,70.0,0.0Z")}}
 /* responsive */
@@ -661,9 +661,10 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 @media (max-width:980px){
   section{padding:90px 0}
   .hero{padding:120px 0 70px;min-height:auto}
-  .hero .wrap,.outside .wrap,.welcome .top,.evidence .wrap,.approach .head,.ap-grid,.cv .wrap,.space .head,.faq .wrap,.contact .wrap{grid-template-columns:1fr;gap:54px}
+  .hero .wrap,.o-grid,.welcome .top,.evidence .wrap,.approach .head,.ap-grid,.cv .wrap,.space .head,.faq .wrap,.contact .wrap{grid-template-columns:1fr;gap:54px}
   .hero-art{width:min(86%,420px);order:-1}
   .o-photo,.ap-ph,.cv-ph{position:relative;top:0;width:min(78%,360px)}
+  .o-head{margin-bottom:44px;text-align:left}.o-head .eyebrow::after{left:0;margin-left:0}
   .o-photo .b2{display:none}
   .whom{grid-template-columns:1fr;max-width:620px;margin-left:auto;margin-right:auto}
   .sv-grid{grid-template-columns:1fr 1fr}
@@ -790,16 +791,19 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 <!-- OUTSIDE / INSIDE -->
 <section class="outside" aria-labelledby="h-out">
   <div class="wrap">
-    <div class="o-photo rv cur">
+    <div class="o-head">
+      <span class="eyebrow rv" data-i="oe">Εξωτερικά, φαίνεσαι μια χαρά</span>
+      <h2 id="h-out" class="rv rv-flip" data-i="ot">Ικαν<span class="gx" data-g="ή|ός" aria-hidden="true">ή</span><span class="sr">ή/ός</span>, επιτυχημέν<span class="gx" data-g="η|ος" aria-hidden="true">η</span><span class="sr">η/ος</span>, που κρατάει τα πάντα ενωμένα.</h2>
+      <p class="inner rv rv-l" data-i="o1">Αλλά μέσα σου, μπορεί να νιώθεις πολύ διαφορετικά: υπερβολική σκέψη, συνεχής πίεση, εξάντληση, άγχος, ενοχές ή την αίσθηση ότι είσαι διαρκώς άδει<span class="gx" data-g="α|ος" aria-hidden="true">α</span><span class="sr">α/ος</span> από ενέργεια.</p>
+    </div>
+    <div class="o-grid">
+      <div class="o-photo rv cur">
       <svg class="line" viewBox="0 0 220 60" aria-hidden="true"><path d="M4 40C40 10 80 52 116 30S180 6 216 22" fill="none" stroke="var(--rose)" stroke-width="1.6" stroke-linecap="round"/></svg>
       <img src="assets/img/anthi-outdoors.webp" width="1000" height="1500" loading="lazy" decoding="async" alt="Η Ανθή Θωμά σε εξωτερικό χώρο, ανάμεσα σε φυτά" data-lb>
       <svg class="blob sB b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--teal)" transform="translate(100 100)" d="M58.6,0.0C59.2,16.7,61.6,39.9,51.8,51.8C42.1,63.8,16.6,72.5,0.0,71.8C-16.6,71.1,-37.7,59.6,-47.7,47.7C-57.7,35.7,-59.0,16.9,-60.0,0.0C-61.1,-16.9,-63.9,-41.1,-53.9,-53.9C-43.9,-66.6,-17.0,-77.5,-0.0,-76.6C17.0,-75.7,38.6,-61.1,48.3,-48.3C58.1,-35.6,58.0,-16.7,58.6,0.0Z"/></svg>
       <svg class="blob sA b2" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--sun-soft)" transform="translate(100 100)" d="M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z"/></svg>
-    </div>
-    <div>
-      <span class="eyebrow rv" data-i="oe">Εξωτερικά, φαίνεσαι μια χαρά</span>
-      <h2 id="h-out" class="rv rv-flip" data-i="ot">Ικαν<span class="gx" data-g="ή|ός|ό" aria-hidden="true">ή</span><span class="sr">ή/ός/ό</span>, επιτυχημέν<span class="gx" data-g="η|ος|ο" aria-hidden="true">η</span><span class="sr">η/ος/ο</span>, που κρατάει τα πάντα ενωμένα.</h2>
-      <p class="inner rv rv-l" data-i="o1">Αλλά μέσα σου, μπορεί να νιώθεις πολύ διαφορετικά: υπερβολική σκέψη, συνεχής πίεση, εξάντληση, άγχος, ενοχές ή την αίσθηση ότι είσαι διαρκώς άδει<span class="gx" data-g="α|ος|ο" aria-hidden="true">α</span><span class="sr">α/ος/ο</span> από ενέργεια.</p>
+      </div>
+      <div class="o-text">
       <div class="body">
         <p class="rv" data-i="o2">Ίσως προσπαθείς να διαχειριστείς τις απαιτήσεις της εργασίας, των σχέσεων και της οικογενειακής ζωής, να ανταποκριθείς σε πολλούς διαφορετικούς ρόλους, να προσαρμοστείς στη ζωή στο εξωτερικό ή να κουβαλάς ακόμη τον αντίκτυπο δύσκολων εμπειριών ζωής.</p>
       </div>
@@ -809,8 +813,9 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
         <p class="rv" data-i="o5">Μέσα από τη θεραπευτική διαδικασία μπορείς να αρχίσεις να ακούς πιο ουσιαστικά τι συμβαίνει μέσα σου, να κατανοήσεις τι σε εξαντλεί, τι σε δυσκολεύει και ποια μοτίβα επαναλαμβάνονται στη ζωή και στις σχέσεις σου.</p>
         <p class="rv" data-i="o6">Σιγά σιγά, μπορεί να δημιουργηθεί περισσότερος χώρος για ηρεμία, σταθερότητα, προσωπικά όρια και ουσιαστικότερη επαφή με τις ανάγκες και τις επιθυμίες σου.</p>
       </div>
-      <p class="goal rv" data-i="o7">Στόχος δεν είναι απλώς να αντέχεις καλύτερα. Είναι να νιώσεις πιο συνδεδεμέν<span class="gx" data-g="η|ος|ο" aria-hidden="true">η</span><span class="sr">η/ος/ο</span> με τον εαυτό σου, πιο παρ<span class="gx" data-g="ούσα|ών|όν" aria-hidden="true">ούσα</span><span class="sr">ούσα/ών/όν</span> στη ζωή και στις σχέσεις σου και πιο ελεύθερ<span class="gx" data-g="η|ος|ο" aria-hidden="true">η</span><span class="sr">η/ος/ο</span> να ζεις με τρόπο που να σε εκφράζει πραγματικά.</p>
-      <p class="gx-note rv"><i aria-hidden="true"><b style="background:var(--coral)"></b><b style="background:var(--teal)"></b><b style="background:var(--sun)"></b></i><span data-i="gn">Γράφω για όλους, όλες και όλα</span></p>
+      <p class="goal rv" data-i="o7">Στόχος δεν είναι απλώς να αντέχεις καλύτερα. Είναι να νιώσεις πιο συνδεδεμέν<span class="gx" data-g="η|ος" aria-hidden="true">η</span><span class="sr">η/ος</span> με τον εαυτό σου, πιο παρ<span class="gx" data-g="ούσα|ών" aria-hidden="true">ούσα</span><span class="sr">ούσα/ών</span> στη ζωή και στις σχέσεις σου και πιο ελεύθερ<span class="gx" data-g="η|ος" aria-hidden="true">η</span><span class="sr">η/ος</span> να ζεις με τρόπο που να σε εκφράζει πραγματικά.</p>
+      <p class="gx-note rv"><i aria-hidden="true"><b style="background:var(--coral)"></b><b style="background:var(--teal)"></b><b style="background:var(--sun)"></b></i><span data-i="gn">Γράφω για όλες και όλους</span></p>
+      </div>
     </div>
   </div>
 </section>
@@ -826,7 +831,7 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
         <p class="rv" data-i="w2">Στο γραφείο μου στη Νέα Σμύρνη και διαδικτυακά εργάζομαι με <strong>παιδιά, εφήβους, ενήλικες και γονείς</strong>, με ανθρώπους διαφορετικών οικογενειακών, κοινωνικών και πολιτισμικών διαδρομών.</p>
         <p class="rv" data-i="w3">Η θεραπεία δεν έχει στόχο απλώς να σε βοηθήσει να αντέχεις περισσότερο. Μπορεί να γίνει ένας χώρος όπου θα κατανοήσεις βαθύτερα τι σου συμβαίνει, θα αναγνωρίσεις τα μοτίβα που επαναλαμβάνονται και θα ανακαλύψεις διαφορετικούς τρόπους να σχετίζεσαι με τον εαυτό σου, τους άλλους και τη ζωή σου.</p>
       </div>
-      <div class="ph rv d1 cur">
+      <div class="ph rv d1">
         <svg class="blob sC b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--rose-soft)" transform="translate(100 100)" d="M54.3,0.0C52.2,15.6,49.5,29.6,40.4,40.4C31.4,51.2,15.4,63.1,0.0,65.0C-15.4,66.9,-42.1,62.6,-51.7,51.7C-61.4,40.9,-59.8,15.4,-57.9,0.0C-56.0,-15.4,-50.1,-30.3,-40.4,-40.4C-30.8,-50.5,-15.6,-58.4,-0.0,-60.5C15.6,-62.6,44.1,-63.3,53.2,-53.2C62.2,-43.1,56.5,-15.6,54.3,0.0Z"/></svg>
         <svg class="blob sA b2" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--teal)" transform="translate(100 100)" d="M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z"/></svg>
         <img src="assets/img/anthi-rooftop.webp" width="1200" height="791" loading="lazy" decoding="async" alt="Πορτρέτο της Ανθής Θωμά σε ταράτσα με θέα την πόλη" data-lb>
@@ -843,7 +848,7 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 <!-- EVIDENCE -->
 <section class="evidence" aria-labelledby="h-ev">
   <div class="wrap">
-    <div class="ev-ph rv cur">
+    <div class="ev-ph rv">
       <svg class="blob sA b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--lilac-soft)" transform="translate(100 100)" d="M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z"/></svg>
       <svg class="blob sC b2" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--coral)" transform="translate(100 100)" d="M54.3,0.0C52.2,15.6,49.5,29.6,40.4,40.4C31.4,51.2,15.4,63.1,0.0,65.0C-15.4,66.9,-42.1,62.6,-51.7,51.7C-61.4,40.9,-59.8,15.4,-57.9,0.0C-56.0,-15.4,-50.1,-30.3,-40.4,-40.4C-30.8,-50.5,-15.6,-58.4,-0.0,-60.5C15.6,-62.6,44.1,-63.3,53.2,-53.2C62.2,-43.1,56.5,-15.6,54.3,0.0Z"/></svg>
       <img src="assets/img/anthi-white-room.webp" width="1000" height="1333" loading="lazy" decoding="async" alt="Η Ανθή Θωμά καθισμένη σε λευκό γραφείο" data-lb>
@@ -868,7 +873,7 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
       <p class="rv d1" data-i="al">Η θεραπευτική μου προσέγγιση είναι συνθετική και προσαρμόζεται στις ανάγκες, την προσωπικότητα και την ιδιαίτερη ιστορία κάθε ανθρώπου. Βασίζεται κυρίως στη Συστημική Ψυχοθεραπεία και εμπλουτίζεται από την υπαρξιακή και πολιτισμική ματιά, την EMDR, καθώς και από στοιχεία της Γνωσιακής–Συμπεριφορικής προσέγγισης.</p>
     </div>
     <div class="ap-grid">
-      <div class="ap-ph rv cur">
+      <div class="ap-ph rv">
         <svg class="blob sB b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--sage-soft)" transform="translate(100 100)" d="M58.6,0.0C59.2,16.7,61.6,39.9,51.8,51.8C42.1,63.8,16.6,72.5,0.0,71.8C-16.6,71.1,-37.7,59.6,-47.7,47.7C-57.7,35.7,-59.0,16.9,-60.0,0.0C-61.1,-16.9,-63.9,-41.1,-53.9,-53.9C-43.9,-66.6,-17.0,-77.5,-0.0,-76.6C17.0,-75.7,38.6,-61.1,48.3,-48.3C58.1,-35.6,58.0,-16.7,58.6,0.0Z"/></svg>
         <img src="assets/img/anthi-office-white.webp" width="1000" height="1500" loading="lazy" decoding="async" alt="Η Ανθή Θωμά στο γραφείο της" data-lb>
       </div>
@@ -916,7 +921,7 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 <!-- CV -->
 <section class="cv" id="viografiko" aria-labelledby="h-cv">
   <div class="wrap">
-    <div class="cv-ph rv cur">
+    <div class="cv-ph rv">
       <svg class="blob sC b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--teal-soft)" transform="translate(100 100)" d="M54.3,0.0C52.2,15.6,49.5,29.6,40.4,40.4C31.4,51.2,15.4,63.1,0.0,65.0C-15.4,66.9,-42.1,62.6,-51.7,51.7C-61.4,40.9,-59.8,15.4,-57.9,0.0C-56.0,-15.4,-50.1,-30.3,-40.4,-40.4C-30.8,-50.5,-15.6,-58.4,-0.0,-60.5C15.6,-62.6,44.1,-63.3,53.2,-53.2C62.2,-43.1,56.5,-15.6,54.3,0.0Z"/></svg>
       <svg class="blob sA b2" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--rose)" transform="translate(100 100)" d="M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z"/></svg>
       <img src="assets/img/anthi-diplomas.webp" width="1000" height="1500" loading="lazy" decoding="async" alt="Η Ανθή Θωμά στο γραφείο της, μπροστά από τα πτυχία της" data-lb>
@@ -1135,16 +1140,16 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
   dr.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ tog(false); }); });
 
   // inclusive endings — all words move together; the order rotates (η → ος → ο → …) starting at random
-  var gx=[].slice.call(d.querySelectorAll('.gx')), gi=Math.floor(Math.random()*3);
-  function gset(){ gx.forEach(function(s){ s.textContent=s.dataset.g.split('|')[gi]; }); }
+  var gx=[].slice.call(d.querySelectorAll('.gx')), gi=Math.floor(Math.random()*2);
+  function gset(){ gx.forEach(function(s){ var p=s.dataset.g.split('|'); s.textContent=p[gi%p.length]; }); }
   gset();
   if(!reduce && gx.length){
     setInterval(function(){
       if(d.hidden) return;
       gx.forEach(function(s){ s.classList.add('out'); });
-      setTimeout(function(){ gi=(gi+1)%3; gset(); gx.forEach(function(s){ s.classList.remove('out'); }); },350);
+      setTimeout(function(){ gi=(gi+1)%2; gset(); gx.forEach(function(s){ s.classList.remove('out'); }); },350);
     },2600);
-  } else { gx.forEach(function(s){ var p=s.dataset.g.split('|'); s.textContent=p[gi]+'/'+p[(gi+1)%3]+'/'+p[(gi+2)%3]; }); }
+  } else { gx.forEach(function(s){ var p=s.dataset.g.split('|'); s.textContent=p[gi%2]+'/'+p[(gi+1)%2]; }); }
 
   // cv tabs
   var tabs=[].slice.call(d.querySelectorAll('[role=tab]'));
