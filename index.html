@@ -712,7 +712,7 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 .o2{width:52vmax;height:52vmax;right:-16vmax;top:6vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--teal-soft) 90%,transparent),transparent)}
 .o3{width:46vmax;height:46vmax;left:24vmax;bottom:-26vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--sun-soft) 90%,transparent),transparent)}
 .hbg-lines{position:absolute;inset:0;width:100%;height:100%}
-.ln{stroke-width:1.4;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
+.ln{stroke-width:1.1;opacity:.55;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
 .l1{stroke:color-mix(in srgb,var(--coral) 55%,transparent)}.l2{stroke:color-mix(in srgb,var(--teal) 60%,transparent)}.l3{stroke:color-mix(in srgb,var(--sun) 70%,transparent)}
 .hero.go .ln{stroke-dashoffset:0;transition:stroke-dashoffset 2.6s var(--ease) .5s}.hero.go .l2{transition-delay:.9s}.hero.go .l3{transition-delay:1.3s}
 html:not(.js) .ln{stroke-dashoffset:0}
@@ -740,6 +740,41 @@ html:not(.js) .ln{stroke-dashoffset:0}
 }
 @media (prefers-reduced-motion:reduce){.hpt,.sk{display:none}.ln{stroke-dashoffset:0}}
 @media (max-width:760px){.hpt:nth-child(even),.sk:nth-child(n+6){display:none}.orbit{width:116%}.ln{stroke-width:1.1}}
+
+/* ===== AMBIENT LAYER, WHOLE SITE («life layer v3», 21 Sept 2026): every section gets its own quiet moving background, built by the script at the end. One kind of motion per section (data-amb): rise · twinkle · fall · rings · flower. Sits BEHIND the content (z-index:-1 inside an isolated section). Runs only while its section is on screen. ===== */
+main>section,.ftr{position:relative;isolation:isolate}
+.amb{position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none}
+.amb .aw{position:absolute;border-radius:50%;width:46vmax;height:46vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--c) 70%,transparent),transparent);opacity:.75}
+.amb .aw.wa{left:-14vmax;top:-10vmax}.amb .aw.wb{right:-16vmax;bottom:-14vmax}
+.amb .ap{position:absolute;left:var(--x);width:var(--s);height:var(--s);opacity:0}
+.amb .ap b{display:block;width:100%;height:100%;background:var(--c);border-radius:85% 0 85% 0;transform:rotate(var(--r))}
+.amb[data-amb=rise] .ap{bottom:-40px}.amb[data-amb=fall] .ap{top:-40px}
+.amb .as{position:absolute;width:var(--s);height:var(--s);background:var(--c);clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);opacity:0;transform:scale(.2)}
+.amb .arg{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);margin:calc(var(--s)/-2) 0 0 calc(var(--s)/-2);border-radius:50%;border:1.5px solid color-mix(in srgb,var(--c) 55%,transparent);opacity:.0}
+.amb .af{position:absolute;width:min(560px,70vw);height:auto;aspect-ratio:1;opacity:.5}
+.amb .af.f1{right:-160px;top:-140px}.amb .af.f2{left:-190px;bottom:-170px;width:min(420px,56vw)}
+.amb .af ellipse{fill:none;stroke-width:.35;vector-effect:non-scaling-stroke}
+.ftr .amb .aw{opacity:.35}.ftr .amb .as{filter:none}
+@media (prefers-reduced-motion:no-preference){
+ .amb .aw.wa{animation:awA 28s ease-in-out infinite alternate}.amb .aw.wb{animation:awB 34s ease-in-out infinite alternate}
+ @keyframes awA{to{transform:translate3d(10vmax,8vmax,0) scale(1.18)}}
+ @keyframes awB{to{transform:translate3d(-9vmax,-7vmax,0) scale(.86)}}
+ .amb[data-amb=rise] .ap{animation:apRise var(--d) linear var(--dl) infinite}
+ .amb[data-amb=fall] .ap{animation:apFall var(--d) linear var(--dl) infinite}
+ .amb .ap b{animation:apSway calc(var(--d)/3.4) ease-in-out var(--dl) infinite alternate}
+ @keyframes apRise{0%{transform:translate3d(0,0,0);opacity:0}8%{opacity:.6}88%{opacity:.5}100%{transform:translate3d(0,calc(var(--h)*-1 - 80px),0);opacity:0}}
+ @keyframes apFall{0%{transform:translate3d(0,0,0);opacity:0}8%{opacity:.6}88%{opacity:.5}100%{transform:translate3d(12vw,calc(var(--h) + 80px),0);opacity:0}}
+ @keyframes apSway{from{transform:translate3d(calc(var(--sw)*-1),0,0) rotate(var(--r))}to{transform:translate3d(var(--sw),0,0) rotate(calc(var(--r) + 160deg))}}
+ .amb .as{animation:asTw 6s ease-in-out var(--dl) infinite}
+ @keyframes asTw{0%,100%{opacity:0;transform:scale(.2) rotate(0)}45%,55%{opacity:.85;transform:scale(1) rotate(90deg)}}
+ .amb .arg{animation:arPulse var(--d) ease-out var(--dl) infinite}
+ @keyframes arPulse{0%{opacity:0;transform:scale(.35)}25%{opacity:.7}100%{opacity:0;transform:scale(1.25)}}
+ .amb .af.f1{animation:afSpin 120s linear infinite}.amb .af.f2{animation:afSpin 160s linear infinite reverse}
+ @keyframes afSpin{to{rotate:360deg}}
+ .amb.off *{animation-play-state:paused!important}
+}
+@media (prefers-reduced-motion:reduce){.amb .ap,.amb .as,.amb .arg{display:none}}
+@media (max-width:760px){.amb .ap:nth-of-type(even),.amb .as:nth-of-type(n+5){display:none}.amb .aw{width:70vmax;height:70vmax;opacity:.6}}
 </style>
 </head>
 <body id="top">
@@ -794,8 +829,6 @@ html:not(.js) .ln{stroke-dashoffset:0}
   <div class="hbg" aria-hidden="true">
     <div class="hbg-par"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
     <svg class="hbg-lines" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
-      <path class="ln l1" pathLength="1" d="M-40,640 C220,520 380,760 640,640 S1060,470 1480,610"/>
-      <path class="ln l2" pathLength="1" d="M-40,250 C260,350 430,130 720,230 S1150,380 1480,190"/>
       <path class="ln l3" pathLength="1" d="M-40,800 C300,880 620,720 900,810 S1300,880 1480,760"/>
     </svg>
     <div class="hbg-pts"><i class="hpt" style="--x:4%;--s:18px;--d:26s;--dl:-3s;--c:var(--coral-soft);--sw:40px;--r:20deg"><b></b></i><i class="hpt" style="--x:11%;--s:12px;--d:21s;--dl:-12s;--c:var(--sage);--sw:-30px;--r:80deg"><b></b></i><i class="hpt" style="--x:19%;--s:22px;--d:30s;--dl:-20s;--c:var(--sun-soft);--sw:50px;--r:140deg"><b></b></i><i class="hpt" style="--x:27%;--s:10px;--d:19s;--dl:-7s;--c:var(--rose);--sw:-24px;--r:10deg"><b></b></i><i class="hpt" style="--x:36%;--s:16px;--d:24s;--dl:-15s;--c:var(--teal);--sw:36px;--r:200deg"><b></b></i><i class="hpt" style="--x:45%;--s:13px;--d:28s;--dl:-1s;--c:var(--lilac);--sw:-44px;--r:60deg"><b></b></i><i class="hpt" style="--x:54%;--s:20px;--d:23s;--dl:-18s;--c:var(--sage-soft);--sw:30px;--r:300deg"><b></b></i><i class="hpt" style="--x:62%;--s:11px;--d:20s;--dl:-9s;--c:var(--coral);--sw:-36px;--r:120deg"><b></b></i><i class="hpt" style="--x:71%;--s:17px;--d:27s;--dl:-22s;--c:var(--sun);--sw:44px;--r:30deg"><b></b></i><i class="hpt" style="--x:80%;--s:12px;--d:22s;--dl:-5s;--c:var(--teal-soft);--sw:-28px;--r:250deg"><b></b></i><i class="hpt" style="--x:88%;--s:21px;--d:29s;--dl:-14s;--c:var(--rose-soft);--sw:38px;--r:170deg"><b></b></i><i class="hpt" style="--x:95%;--s:10px;--d:18s;--dl:-11s;--c:var(--lilac-soft);--sw:-32px;--r:90deg"><b></b></i></div>
@@ -1341,6 +1374,28 @@ html:not(.js) .ln{stroke-dashoffset:0}
  if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){var t=0;
   h.addEventListener('pointermove',function(e){if(t)return;t=requestAnimationFrame(function(){t=0;var r=h.getBoundingClientRect();h.style.setProperty('--mx',((e.clientX-r.left)/r.width-.5).toFixed(3));h.style.setProperty('--my',((e.clientY-r.top)/r.height-.5).toFixed(3))})});
   h.addEventListener('pointerleave',function(){h.style.setProperty('--mx',0);h.style.setProperty('--my',0)})}})();
+</script>
+<script>
+/* ambient layer for the whole site — one quiet, different motion per section; only the section on screen is animated */
+(function(){var d=document,secs=[].slice.call(d.querySelectorAll('main>section:not(.hero),.ftr'));if(!secs.length)return;
+ var soft=['coral-soft','teal-soft','sun-soft','sage-soft','rose-soft','lilac-soft'],full=['coral','teal','sun','sage','rose','lilac'];
+ var plan={outside:'twinkle',welcome:'rise',evidence:'rings',approach:'flower',services:'fall',cv:'twinkle',space:'rings',reviews:'rise',faq:'flower',contact:'fall',ftr:'twinkle'};
+ var seed=7;function R(){seed=(seed*16807)%2147483647;return seed/2147483647}
+ function el(t,c,st){var e=d.createElement(t);e.className=c;if(st)e.setAttribute('style',st);return e}
+ secs.forEach(function(sec,k){var kind=plan[sec.classList[0]]||['rise','twinkle','fall','rings','flower'][k%5],dark=sec.classList.contains('ftr');
+  var a=el('div','amb');a.setAttribute('data-amb',kind);a.setAttribute('aria-hidden','true');a.classList.add('off');
+  a.appendChild(el('i','aw wa','--c:var(--'+(dark?'deep':soft[k%6])+')'));a.appendChild(el('i','aw wb','--c:var(--'+(dark?'teal':soft[(k+3)%6])+')'));
+  var i,n;
+  if(kind==='rise'||kind==='fall'){for(i=0;i<6;i++){var p=el('i','ap','--x:'+(4+i*16+R()*8).toFixed(1)+'%;--s:'+(10+R()*12|0)+'px;--d:'+(26+R()*16|0)+'s;--dl:-'+(R()*30|0)+'s;--c:var(--'+(R()<.5?soft:full)[(k+i)%6]+');--sw:'+((R()<.5?-1:1)*(24+R()*26|0))+'px;--r:'+(R()*360|0)+'deg');p.appendChild(d.createElement('b'));a.appendChild(p)}}
+  if(kind==='twinkle'){for(i=0;i<8;i++)a.appendChild(el('i','as','left:'+(3+R()*94).toFixed(1)+'%;top:'+(4+R()*90).toFixed(1)+'%;--s:'+(9+R()*8|0)+'px;--dl:'+(R()*6).toFixed(1)+'s;--c:var(--'+(dark?['sun','coral-soft','teal-soft'][i%3]:full[(k+i)%6])+')'))}
+  if(kind==='rings'){for(i=0;i<4;i++)a.appendChild(el('i','arg','--x:'+[8,92,14,86][i]+'%;--y:'+[18,30,82,74][i]+'%;--s:'+(180+R()*160|0)+'px;--d:'+(9+i*2)+'s;--dl:-'+(i*2.5)+'s;--c:var(--'+full[(k+i)%6]+')'))}
+  if(kind==='flower'){['f1','f2'].forEach(function(f,j){var sv='<svg class="af '+f+'" viewBox="-24 -24 48 48">';for(n=0;n<5;n++)sv+='<ellipse rx="6.2" ry="11" cy="-9.5" stroke="var(--'+full[(n+j+k)%6]+')" transform="rotate('+n*72+')"/>';a.insertAdjacentHTML('beforeend',sv+'</svg>')})}
+  sec.insertBefore(a,sec.firstChild)});
+ function size(){secs.forEach(function(s){var a=s.querySelector('.amb');if(a)a.style.setProperty('--h',s.offsetHeight+'px')})}
+ size();var t;addEventListener('resize',function(){clearTimeout(t);t=setTimeout(size,250)});addEventListener('load',size);
+ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){var a=e.target.querySelector('.amb');if(a)a.classList.toggle('off',!e.isIntersecting)})},{rootMargin:'80px 0px'});secs.forEach(function(s){io.observe(s)})}
+ else secs.forEach(function(s){s.querySelector('.amb').classList.remove('off')});
+})();
 </script>
 </body>
 </html>
