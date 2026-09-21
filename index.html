@@ -702,12 +702,44 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 }
 @media (max-width:420px){.brand small{display:none}}
 
-/* ===== HERO VIDEO («life layer v3», 21 Sept 2026): the photo is always underneath; the living loop fades in over it only once it really plays ===== */
-.hv{position:relative}
-.hv-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease;pointer-events:none}
-.hv.on .hv-v{opacity:1}
-.hv.on img{animation-play-state:paused}
-@media (prefers-reduced-motion:reduce){.hv-v{display:none}}
+/* ===== ANIMATED HERO BACKGROUND («life layer v3», 21 Sept 2026) — for heroes that are a portrait + text. Transform/opacity only; pauses off-screen; static under reduced motion ===== */
+.hero{position:relative;overflow:clip;--mx:0;--my:0}
+.hero .wrap{position:relative;z-index:1}
+.hbg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.hbg-par{position:absolute;inset:-6%;transform:translate3d(calc(var(--mx)*-34px),calc(var(--my)*-26px),0);transition:transform 1.2s var(--ease)}
+.orb{position:absolute;border-radius:50%;opacity:.9;will-change:transform}
+.o1{width:58vmax;height:58vmax;left:-18vmax;top:-22vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--coral-soft) 85%,transparent),transparent)}
+.o2{width:52vmax;height:52vmax;right:-16vmax;top:6vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--teal-soft) 90%,transparent),transparent)}
+.o3{width:46vmax;height:46vmax;left:24vmax;bottom:-26vmax;background:radial-gradient(closest-side,color-mix(in srgb,var(--sun-soft) 90%,transparent),transparent)}
+.hbg-lines{position:absolute;inset:0;width:100%;height:100%}
+.ln{stroke-width:1.4;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
+.l1{stroke:color-mix(in srgb,var(--coral) 55%,transparent)}.l2{stroke:color-mix(in srgb,var(--teal) 60%,transparent)}.l3{stroke:color-mix(in srgb,var(--sun) 70%,transparent)}
+.hero.go .ln{stroke-dashoffset:0;transition:stroke-dashoffset 2.6s var(--ease) .5s}.hero.go .l2{transition-delay:.9s}.hero.go .l3{transition-delay:1.3s}
+html:not(.js) .ln{stroke-dashoffset:0}
+.hpt{position:absolute;left:var(--x);bottom:-40px;width:var(--s);height:var(--s);opacity:0}
+.hpt b{display:block;width:100%;height:100%;background:var(--c);border-radius:85% 0 85% 0;transform:rotate(var(--r));box-shadow:0 6px 14px -8px rgba(47,42,39,.35)}
+.sk{position:absolute;width:14px;height:14px;background:var(--sun);clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);opacity:0;transform:scale(.2)}
+.sk:nth-child(3n){background:var(--coral);width:10px;height:10px}.sk:nth-child(3n+1){background:var(--teal)}
+.orbit{position:absolute;z-index:0;left:50%;top:50%;width:128%;height:auto;aspect-ratio:1;translate:-50% -50%;pointer-events:none;overflow:visible}
+@media (prefers-reduced-motion:no-preference){
+ .o1{animation:orbA 26s ease-in-out infinite alternate}.o2{animation:orbB 32s ease-in-out infinite alternate}.o3{animation:orbC 22s ease-in-out infinite alternate}
+ @keyframes orbA{to{transform:translate3d(9vmax,7vmax,0) scale(1.15)}}
+ @keyframes orbB{to{transform:translate3d(-11vmax,5vmax,0) scale(.88)}}
+ @keyframes orbC{to{transform:translate3d(7vmax,-9vmax,0) scale(1.2)}}
+ .hbg-lines{animation:lnFloat 14s ease-in-out infinite alternate}
+ @keyframes lnFloat{from{transform:translate3d(0,-10px,0)}to{transform:translate3d(0,14px,0)}}
+ .hpt{animation:ptRise var(--d) linear var(--dl) infinite}
+ .hpt b{animation:ptSway calc(var(--d)/3.2) ease-in-out var(--dl) infinite alternate}
+ @keyframes ptRise{0%{transform:translate3d(0,0,0);opacity:0}8%{opacity:.75}85%{opacity:.6}100%{transform:translate3d(0,-118svh,0);opacity:0}}
+ @keyframes ptSway{from{transform:translate3d(calc(var(--sw)*-1),0,0) rotate(var(--r))}to{transform:translate3d(var(--sw),0,0) rotate(calc(var(--r) + 150deg))}}
+ .sk{animation:skTw 5.5s ease-in-out var(--dl) infinite}
+ @keyframes skTw{0%,100%{opacity:0;transform:scale(.2) rotate(0)}45%,55%{opacity:.9;transform:scale(1) rotate(90deg)}}
+ .orbit{animation:orbit 70s linear infinite}
+ @keyframes orbit{to{rotate:360deg}}
+ .hero.hbg-off .orb,.hero.hbg-off .hbg-lines,.hero.hbg-off .hpt,.hero.hbg-off .hpt b,.hero.hbg-off .sk,.hero.hbg-off .orbit{animation-play-state:paused}
+}
+@media (prefers-reduced-motion:reduce){.hpt,.sk{display:none}.ln{stroke-dashoffset:0}}
+@media (max-width:760px){.hpt:nth-child(even),.sk:nth-child(n+6){display:none}.orbit{width:116%}.ln{stroke-width:1.1}}
 </style>
 </head>
 <body id="top">
@@ -758,6 +790,17 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 
 <!-- HERO -->
 <section class="hero" aria-labelledby="h1">
+  <!-- animated hero background («life layer v3»): drifting colour washes · self-drawing lines · rising petals · sparkles. Transform/opacity only. -->
+  <div class="hbg" aria-hidden="true">
+    <div class="hbg-par"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
+    <svg class="hbg-lines" viewBox="0 0 1440 900" preserveAspectRatio="none" fill="none">
+      <path class="ln l1" pathLength="1" d="M-40,640 C220,520 380,760 640,640 S1060,470 1480,610"/>
+      <path class="ln l2" pathLength="1" d="M-40,250 C260,350 430,130 720,230 S1150,380 1480,190"/>
+      <path class="ln l3" pathLength="1" d="M-40,800 C300,880 620,720 900,810 S1300,880 1480,760"/>
+    </svg>
+    <div class="hbg-pts"><i class="hpt" style="--x:4%;--s:18px;--d:26s;--dl:-3s;--c:var(--coral-soft);--sw:40px;--r:20deg"><b></b></i><i class="hpt" style="--x:11%;--s:12px;--d:21s;--dl:-12s;--c:var(--sage);--sw:-30px;--r:80deg"><b></b></i><i class="hpt" style="--x:19%;--s:22px;--d:30s;--dl:-20s;--c:var(--sun-soft);--sw:50px;--r:140deg"><b></b></i><i class="hpt" style="--x:27%;--s:10px;--d:19s;--dl:-7s;--c:var(--rose);--sw:-24px;--r:10deg"><b></b></i><i class="hpt" style="--x:36%;--s:16px;--d:24s;--dl:-15s;--c:var(--teal);--sw:36px;--r:200deg"><b></b></i><i class="hpt" style="--x:45%;--s:13px;--d:28s;--dl:-1s;--c:var(--lilac);--sw:-44px;--r:60deg"><b></b></i><i class="hpt" style="--x:54%;--s:20px;--d:23s;--dl:-18s;--c:var(--sage-soft);--sw:30px;--r:300deg"><b></b></i><i class="hpt" style="--x:62%;--s:11px;--d:20s;--dl:-9s;--c:var(--coral);--sw:-36px;--r:120deg"><b></b></i><i class="hpt" style="--x:71%;--s:17px;--d:27s;--dl:-22s;--c:var(--sun);--sw:44px;--r:30deg"><b></b></i><i class="hpt" style="--x:80%;--s:12px;--d:22s;--dl:-5s;--c:var(--teal-soft);--sw:-28px;--r:250deg"><b></b></i><i class="hpt" style="--x:88%;--s:21px;--d:29s;--dl:-14s;--c:var(--rose-soft);--sw:38px;--r:170deg"><b></b></i><i class="hpt" style="--x:95%;--s:10px;--d:18s;--dl:-11s;--c:var(--lilac-soft);--sw:-32px;--r:90deg"><b></b></i></div>
+    <div class="hbg-sks"><i class="sk" style="left:8%;top:22%;--dl:0s"></i><i class="sk" style="left:24%;top:68%;--dl:1.4s"></i><i class="sk" style="left:41%;top:14%;--dl:2.6s"></i><i class="sk" style="left:52%;top:80%;--dl:0.8s"></i><i class="sk" style="left:66%;top:9%;--dl:3.4s"></i><i class="sk" style="left:78%;top:58%;--dl:2s"></i><i class="sk" style="left:93%;top:30%;--dl:1.1s"></i><i class="sk" style="left:15%;top:44%;--dl:3.9s"></i></div>
+  </div>
   <div class="wrap">
     <div class="hero-copy">
       <div class="who"><i></i><span><b data-i="bn">Ανθή Θωμά</b><br><span data-i="ht">Ψυχολόγος – Συστημική Ψυχοθεραπεύτρια</span></span></div>
@@ -774,10 +817,11 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
       </div>
     </div>
     <div class="hero-art">
+      <svg class="orbit" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" fill="none" stroke="var(--deep)" stroke-opacity=".28" stroke-width=".5" stroke-dasharray="1.5 5" stroke-linecap="round"/><circle cx="100" cy="4" r="3" fill="var(--coral)"/><circle cx="196" cy="100" r="1.8" fill="var(--sun)"/><circle cx="32" cy="168" r="2.2" fill="var(--teal)"/></svg>
       <svg class="blob sA b1 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--sage)" transform="translate(100 100)" d="M66.7,0.0C66.8,16.3,60.4,36.0,49.3,49.3C38.2,62.6,16.1,80.2,0.0,79.9C-16.1,79.6,-36.0,60.7,-47.4,47.4C-58.8,34.1,-67.8,16.2,-68.2,0.0C-68.6,-16.2,-61.2,-40.0,-49.8,-49.8C-38.4,-59.7,-16.4,-59.4,-0.0,-59.2C16.4,-58.9,37.2,-58.2,48.3,-48.3C59.4,-38.5,66.5,-16.3,66.7,0.0Z"/></svg>
       <svg class="blob sB b2 drift" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--coral-soft)" transform="translate(100 100)" d="M58.6,0.0C59.2,16.7,61.6,39.9,51.8,51.8C42.1,63.8,16.6,72.5,0.0,71.8C-16.6,71.1,-37.7,59.6,-47.7,47.7C-57.7,35.7,-59.0,16.9,-60.0,0.0C-61.1,-16.9,-63.9,-41.1,-53.9,-53.9C-43.9,-66.6,-17.0,-77.5,-0.0,-76.6C17.0,-75.7,38.6,-61.1,48.3,-48.3C58.1,-35.6,58.0,-16.7,58.6,0.0Z"/></svg>
       <svg class="blob sC b3" viewBox="0 0 200 200" aria-hidden="true"><path fill="var(--sun)" transform="translate(100 100)" d="M54.3,0.0C52.2,15.6,49.5,29.6,40.4,40.4C31.4,51.2,15.4,63.1,0.0,65.0C-15.4,66.9,-42.1,62.6,-51.7,51.7C-61.4,40.9,-59.8,15.4,-57.9,0.0C-56.0,-15.4,-50.1,-30.3,-40.4,-40.4C-30.8,-50.5,-15.6,-58.4,-0.0,-60.5C15.6,-62.6,44.1,-63.3,53.2,-53.2C62.2,-43.1,56.5,-15.6,54.3,0.0Z"/></svg>
-      <div class="ph hv"><img src="assets/img/anthi-garden.webp" width="1100" height="1374" fetchpriority="high" decoding="async" alt="Η ψυχολόγος Ανθή Θωμά σε εξωτερικό χώρο" data-lb><video class="hv-v" muted loop playsinline preload="none" poster="assets/video/hero-poster.webp" aria-hidden="true" tabindex="-1" data-webm="assets/video/hero.webm" data-mp4="assets/video/hero.mp4"></video></div>
+      <div class="ph"><img src="assets/img/anthi-garden.webp" width="1100" height="1374" fetchpriority="high" decoding="async" alt="Η ψυχολόγος Ανθή Θωμά σε εξωτερικό χώρο" data-lb></div>
       <a class="badge" href="https://www.doctoranytime.gr/d/Psychologos/anthi-thoma#review-section" target="_blank" rel="noopener"><span><span class="st" aria-hidden="true">★★★★★</span><b>10/10</b><small data-i="hb">δεκάδες αξιολογήσεις</small></span></a>
     </div>
   </div>
@@ -1291,14 +1335,12 @@ body.lang-x main{opacity:0;transform:translateY(6px)}
 })();
 </script>
 <script>
-/* hero video: after first paint; never on Save-Data / 2g / reduced motion; plays only while on screen */
-(function(){var v=document.querySelector('.hv-v');if(!v||!('IntersectionObserver' in window))return;
- var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
- function load(){['webm','mp4'].forEach(function(t){var s=document.createElement('source');s.src=v.dataset[t];s.type='video/'+t;v.appendChild(s)});
-  v.addEventListener('playing',function(){v.parentNode.classList.add('on')},{once:true});v.load();
-  new IntersectionObserver(function(e){e[0].isIntersecting?v.play().catch(function(){}):v.pause()},{threshold:.15}).observe(v)}
- function go(){(window.requestIdleCallback||function(f){setTimeout(f,700)})(load)}
- document.readyState==='complete'?go():window.addEventListener('load',go)})();
+/* animated hero background: pointer parallax for the colour washes + pause everything while the hero is off screen */
+(function(){var h=document.querySelector('.hero');if(!h)return;
+ if('IntersectionObserver' in window)new IntersectionObserver(function(e){h.classList.toggle('hbg-off',!e[0].isIntersecting)},{threshold:0}).observe(h);
+ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){var t=0;
+  h.addEventListener('pointermove',function(e){if(t)return;t=requestAnimationFrame(function(){t=0;var r=h.getBoundingClientRect();h.style.setProperty('--mx',((e.clientX-r.left)/r.width-.5).toFixed(3));h.style.setProperty('--my',((e.clientY-r.top)/r.height-.5).toFixed(3))})});
+  h.addEventListener('pointerleave',function(){h.style.setProperty('--mx',0);h.style.setProperty('--my',0)})}})();
 </script>
 </body>
 </html>
