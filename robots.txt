@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://anthithoma-psychologist.gr/sitemap.xml
